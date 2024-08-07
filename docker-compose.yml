@@ -16,13 +16,20 @@ services:
       - ./my-db:/var/lib/mysql
   app:
     image: phpmyadmin/phpmyadmin:latest
-    links:
-      - db
+    container_name: phpmyadmin-rifive-laravel
     ports:
-      - 13306:80
+        - 8080:80
+    links:
+        - db
+    restart: unless-stopped
     environment:
-      - PMA_ARBITRARY=1
+        PMA_HOST: db
+        #PMA_USER: ${DB_USERNAME}
+        #PMA_PASSWORD: ${DB_PASSWORD}
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1
     volumes:
       - ./php-make/upload.ini:/usr/local/etc/php/php.ini
+
 volumes:
   my-db:
