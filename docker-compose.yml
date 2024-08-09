@@ -1,13 +1,12 @@
-version: '3.8'
 services:
+
   db:
     image: mysql:latest
-    #restart: always
+    container_name: my-mysql-container
+    restart: always
     environment:
-      MYSQL_DATABASE: 'laravel_db'
-      MYSQL_USER: 'laravel_user'
-      MYSQL_PASSWORD: 'Laravel'
-      MYSQL_ROOT_PASSWORD: 'Laravel'
+      MYSQL_ROOT_PASSWORD: root
+
     ports:
       - '3306:3306'
     expose:
@@ -15,21 +14,21 @@ services:
     volumes:
       - ./my-db:/var/lib/mysql
   app:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin:latest
     container_name: phpmyadmin-rifive-laravel
     ports:
         - 8080:80
     links:
         - db
-    restart: unless-stopped
+    #restart: unless-stopped
+    restart : always
     environment:
-        PMA_HOST: db
-        #PMA_USER: ${DB_USERNAME}
-        #PMA_PASSWORD: ${DB_PASSWORD}
-        PMA_PORT: 3306
+        #PMA_HOST: db
+        #PMA_USER: root
+        #PMA_PASSWORD: root
+        #PMA_PORT: 3306
         PMA_ARBITRARY: 1
+    depends_on:
+        - db
     volumes:
       - ./php-make/upload.ini:/usr/local/etc/php/php.ini
-
-volumes:
-  my-db:
